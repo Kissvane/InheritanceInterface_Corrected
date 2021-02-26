@@ -1,0 +1,10 @@
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\obj\Debug\HeritageInterface_Corrected.csprojAssemblyReference.cache
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\obj\Debug\HeritageInterface_Corrected.csproj.CoreCompileInputs.cache
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\bin\Debug\HeritageInterface_Corrected.exe.config
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\bin\Debug\HeritageInterface_Corrected.exe
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\bin\Debug\HeritageInterface_Corrected.pdb
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\obj\Debug\HeritageInterface_Corrected.csproj.CopyComplete
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\obj\Debug\HeritageInterface_Corrected.exe
+C:\Users\Adrien\source\repos\HeritageInterface_Corrected\HeritageInterface_Corrected\obj\Debug\HeritageInterface_Corrected.pdb
