@@ -138,6 +138,7 @@ namespace HeritageEtInterfaceCorrection
             //on fait une deuxième boucle sur les personnage pour retirer les morts de la liste
             //on fait cette boucle de la fin vers le début pour éviter les problèmes que l'on rencontre quand on modifie 
             //une liste sur laquelle on est en train d'itérer
+            int deadInRound = 0;
             for (int i = charactersList.Count - 1; i >= 0; i--)
             {
                 //on stocke le personnage dans une variable pour éviter d'accéder inutilement à la liste
@@ -145,6 +146,19 @@ namespace HeritageEtInterfaceCorrection
                 if (currentPersonnage.CurrentLife <= 0)
                 {
                     charactersList.Remove(currentPersonnage);
+                    deadInRound++;
+                }
+            }
+
+            foreach (Character c in charactersList)
+            {
+                IScavenger current = c as IScavenger;
+                if (current != null)
+                {
+                    for (int i = 0; i < deadInRound; i++)
+                    {
+                        current.EatBody();
+                    }
                 }
             }
 

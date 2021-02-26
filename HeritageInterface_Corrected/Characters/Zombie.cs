@@ -10,11 +10,15 @@ namespace HeritageEtInterfaceCorrection
     {
         public Zombie(string name) : base(name, 100, 0, 20, 50, 1000, (ConsoleColor)7) { }
 
-        public override void Defend(int _attackValue, int _damage, Character _attacker, bool canBeCountered)
+        public override void Defend(int _attackValue, int _damage, Character _attacker)
         {
             MyLog(Name + " encaisse le coup.");
             //on calcule les dégâts finaux
             int finalDamages = (int)(_attackValue * _damage / 100f);
+            if (_attacker.HolyDamages)
+            {
+                finalDamages *= 2;
+            }
             TakeDamages(finalDamages);
         }
 

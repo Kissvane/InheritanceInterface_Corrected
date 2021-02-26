@@ -29,10 +29,10 @@ namespace HeritageEtInterfaceCorrection
 
         protected Random random;
         public int RandomSeed { get; set; }
-        protected bool HolyDamages { get; set; }
-        protected bool UnholyDamages { get; set; }
-        protected bool Blessed { get; set; }
-        protected bool Cursed { get; set; }
+        public bool HolyDamages { get; set; }
+        public bool UnholyDamages { get; set; }
+        public bool Blessed { get; set; }
+        public bool Cursed { get; set; }
 
         public Character(string name, int attack, int defense, int initiative, int damages, int maxLife, int maxAttackNumber = 1, bool holyDamages = false, bool unholyDamages = false, bool blessed = false, bool cursed = false, ConsoleColor color = ConsoleColor.White)
         {
@@ -108,10 +108,10 @@ namespace HeritageEtInterfaceCorrection
         {
             CurrentAttackNumber--;
             MyLog(Name + " attaque " + target.Name + ".");
-            target.Defend(Attack + RollDice(), Damages, this, true);
+            target.Defend(Attack + RollDice(), Damages, this);
         }
 
-        public virtual void Defend(int _attackValue, int _damage, Character _attacker, bool canBeCountered)
+        public virtual void Defend(int _attackValue, int _damage, Character _attacker)
         {
             //On calcule la marge d'attaque
             //en soustrayant le jet de defense du personnage qui defend au jet d'attaque reçu
@@ -135,7 +135,7 @@ namespace HeritageEtInterfaceCorrection
             {
                 //annoncer dans la console que le personnage a reussi sa defense
                 MyLog(Name + " réussi sa défense.");
-                if (_attacker != null && CanAttack && canBeCountered && CurrentAttackNumber > 0)
+                if (_attacker != null && CanAttack && CurrentAttackNumber > 0)
                 {
                     Counter(-AttaqueMargin, _attacker);
                 }
@@ -148,7 +148,7 @@ namespace HeritageEtInterfaceCorrection
             //annoncer dans la console que le personnage contre-attaque
             MyLog(Name + " contre-attaque sur " + Attacker.Name + ".");
             //le personnage fait un jet d'Attaque. Le résultat est envoyé à l'adversaire
-            Attacker.Defend(Attack + RollDice() + _CounterBonus, Damages, this, true);
+            Attacker.Defend(Attack + RollDice() + _CounterBonus, Damages, this);
         }
 
         public virtual void TakeDamages(int _damages)
