@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace HeritageEtInterfaceCorrection
 {
+    public class ZombieSerializer : CharacterSerializer
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(Zombie).IsAssignableFrom(objectType);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            ObjectWriting(writer, value, serializer, "ZOMBIE");
+        }
+    }
+
+    [JsonConverter(typeof(ZombieSerializer))]
     class Zombie : Undead, IScavenger
     {
         public Zombie(string name) : base(name, 100, 0, 20, 50, 1000, (ConsoleColor)7) { }

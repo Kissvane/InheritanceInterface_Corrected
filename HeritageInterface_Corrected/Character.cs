@@ -1,20 +1,106 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HeritageEtInterfaceCorrection
 {
+
+    public class CharacterSerializer : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(Character).IsAssignableFrom(objectType);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject jsonObject = JObject.Load(reader);
+            List<JProperty> properties = jsonObject.Properties().ToList();
+            Character character;
+            switch ((string)properties[0].Value)
+            {
+                case "BERSEKER":
+                    character = new Berseker("");
+                    break;
+                case "ROBOT":
+                    character = new Robot("");
+                    break;
+                case "GHOUL":
+                    character = new Ghoul("");
+                    break;
+                case "LICH":
+                    character = new Lich("");
+                    break;
+                case "WARRIOR":
+                    character = new Warrior("");
+                    break;
+                case "WATCHER":
+                    character = new Watcher("");
+                    break;
+                case "ZOMBIE":
+                    character = new Zombie("");
+                    break;
+                default:
+                    character = new Character();
+                    break;
+            }
+
+            character.ConstructionHelper(properties);
+            return character;
+        }
+
+        public virtual void WriteCharacterProperties(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            Character character = value as Character;
+            //NAME
+            writer.WritePropertyName("Name");
+            serializer.Serialize(writer, character.Name);
+            //CURRENT LIFE
+            writer.WritePropertyName("CurrentLife");
+            serializer.Serialize(writer, character.CurrentLife);
+            //CURRENT INITIATIVE
+            writer.WritePropertyName("CurrentInitiative");
+            serializer.Serialize(writer, character.CurrentInitiative);
+            //CURRENT ATTACK NUMBER
+            writer.WritePropertyName("CurrentAttackNumber");
+            serializer.Serialize(writer, character.CurrentAttackNumber);
+            //CAN ATTACK
+            writer.WritePropertyName("CanAttack");
+            serializer.Serialize(writer, character.CanAttack);
+            //RANDOM SEED
+            writer.WritePropertyName("RandomSeed");
+            serializer.Serialize(writer, character.RandomSeed);
+        }
+
+        public void ObjectWriting(JsonWriter writer, object value, JsonSerializer serializer, string ClassTag)
+        {
+            writer.WriteStartObject();
+            writer.WritePropertyName("Classe");
+            serializer.Serialize(writer, ClassTag);
+            WriteCharacterProperties(writer, value, serializer);
+            writer.WriteEndObject();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            ObjectWriting(writer, value, serializer,"CHARACTER");
+        }
+    }
+
+    [JsonConverter(typeof(CharacterSerializer))]
     class Character
     {
         public string Name { get; set; }
 
-        protected int Attack { get; set; }
-        protected int Defense { get; set; }
-        protected int Initiative { get; set; }
-        protected int Damages { get; set; }
-        protected int MaxLife { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+        public int Initiative { get; set; }
+        public int Damages { get; set; }
+        public int MaxLife { get; set; }
 
-        protected int CurrentCounterBonus { get; set; }
+        public int CurrentCounterBonus { get; set; }
         public int CurrentLife { get; set; }
         public int CurrentInitiative { get; set; }
         public int CurrentAttackNumber { get; set; }
@@ -27,12 +113,18 @@ namespace HeritageEtInterfaceCorrection
 
         public ConsoleColor Color { get; set; }
 
-        protected Random random;
+        [JsonIgnore]
+        public Random random;
         public int RandomSeed { get; set; }
         public bool HolyDamages { get; set; }
         public bool UnholyDamages { get; set; }
         public bool Blessed { get; set; }
         public bool Cursed { get; set; }
+
+        public Character()
+        {
+            MaxAttackNumber = 1;
+        }
 
         public Character(string name, int attack, int defense, int initiative, int damages, int maxLife, int maxAttackNumber = 1, bool holyDamages = false, bool unholyDamages = false, bool blessed = false, bool cursed = false, ConsoleColor color = ConsoleColor.White)
         {
@@ -53,6 +145,16 @@ namespace HeritageEtInterfaceCorrection
             Reset();
         }
 
+        public virtual void ConstructionHelper(List<JProperty> properties)
+        {
+            Name = (string)properties[1].Value;
+            CurrentLife = (int)properties[2].Value;
+            CurrentInitiative = (int)properties[3].Value;
+            CurrentAttackNumber = (int)properties[4].Value;
+            CanAttack = (bool)properties[5].Value;
+            RandomSeed = (int)properties[6].Value;
+        }
+
         public void SetFightManager(FightManager fightManager)
         {
             this.fightManager = fightManager;
@@ -63,6 +165,11 @@ namespace HeritageEtInterfaceCorrection
             CurrentLife = MaxLife;
             CanAttack = true;
             CurrentAttackNumber = MaxAttackNumber;
+        }
+
+        public virtual void LoadingReset()
+        {
+            random = new Random(RandomSeed);
         }
 
         public virtual void RoundReset()
@@ -124,7 +231,7 @@ namespace HeritageEtInterfaceCorrection
                 int finalDamages = (int)(AttaqueMargin * _damage / 100f);
                 if ((_attacker.UnholyDamages && Blessed) || (_attacker.HolyDamages && Cursed))
                 {
-                    TakeDamages(finalDamages*2);
+                    TakeDamages(finalDamages * 2);
                 }
                 else
                 {

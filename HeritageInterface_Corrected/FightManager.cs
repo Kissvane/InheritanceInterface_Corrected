@@ -58,6 +58,7 @@ namespace HeritageEtInterfaceCorrection
             foreach (Character personnage in charactersList)
             {
                 personnage.SetFightManager(this);
+                personnage.LoadingReset();
             }
             MyLog("----- Reprise du combat au round "+round+" -----");
             //a commenter pour enchainer les rounds à la main

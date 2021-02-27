@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,29 @@ using System.Threading.Tasks;
 
 namespace HeritageEtInterfaceCorrection
 {
+    public class BeingSerializer : CharacterSerializer
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(LivingBeing).IsAssignableFrom(objectType);
+        }
+
+        public override void WriteCharacterProperties(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            base.WriteCharacterProperties(writer, value, serializer);
+            IPainFeeler pain = value as IPainFeeler;
+            //PAIN DURATION
+            writer.WritePropertyName("PainDuration");
+            serializer.Serialize(writer, pain.PainDuration);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            ObjectWriting(writer, value, serializer, "LIVING BEING");
+        }
+    }
+
+    [JsonConverter(typeof(BeingSerializer))]
     class LivingBeing : Character, IPainFeeler
     {
         public LivingBeing(string name, int attack, int defense, int initiative, int damages, int maxLife, ConsoleColor _color, bool blessed = false, bool holyDamages = false) : base(name, attack, defense, initiative, damages, maxLife, color:_color, blessed:blessed, holyDamages:holyDamages)
