@@ -34,7 +34,6 @@ namespace HeritageEtInterfaceCorrection
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All,
                 Formatting = Formatting.Indented
             };
 
@@ -45,35 +44,6 @@ namespace HeritageEtInterfaceCorrection
         }
 
         static void LoadFight()
-        {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                Formatting = Formatting.Indented
-            };
-            string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "FightSave.json");
-            string jsonLoadedData = File.ReadAllText(filePath);
-            fightManager = JsonConvert.DeserializeObject<FightManager>(jsonLoadedData, settings);
-            Console.Clear();
-            Console.WriteLine("combat loaded from : " + filePath);
-            Console.WriteLine(fightManager.charactersList[4].Attack);
-            fightManager.CombatReStart();
-        }
-
-        static void SaveFight2()
-        {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            };
-
-            string json = JsonConvert.SerializeObject(fightManager, settings);
-            string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "FightSave.json");
-            Console.WriteLine("combat save to : " + filePath);
-            File.WriteAllText(filePath, json);
-        }
-
-        static void LoadFight2()
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
@@ -93,10 +63,10 @@ namespace HeritageEtInterfaceCorrection
             switch (key)
             {
                 case ConsoleKey.S:
-                    SaveFight2();
+                    SaveFight();
                     break;
                 case ConsoleKey.L:
-                    LoadFight2();
+                    LoadFight();
                     break;
                 default:
                     fightManager.continueFight = true;
